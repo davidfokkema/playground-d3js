@@ -1,0 +1,20 @@
+svg {
+  background: white;
+}
+
+svg path {
+  stroke: black;
+  fill: none;
+}
+
+#trace1 {
+  stroke: red;
+}
+
+.axis line,
+.axis.box
+{
+  fill: none;
+  stroke: black;
+  stroke-width: 1.5px;
+}
