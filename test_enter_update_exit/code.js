@@ -1,26 +1,19 @@
+var timestamps = ["1350432000908520373", "1350432001292592952"];
+var ts_idx = 0;
+var url = 'http://data.hisparc.nl/api/station/501/trace/';
+
 var fullwidth = 400,
     fullheight = 300;
 var margin = {top: 20, right: 20, bottom: 30, left: 50};
 var width = fullwidth - margin.left - margin.right,
     height = fullheight - margin.top - margin.bottom;
 
-var i = 0;
+var key_idx = 0;
 
 var x = d3.scale.linear()
     .range([0, width]);
 var y = d3.scale.linear()
     .range([0, height]);
-
-
-function random_data() {
-  var t = [];
-  for (el in d3.range(Math.random() * 10 + 3)) {
-    t.push(Math.random() * 100);
-  }
-  key = i;
-  i = (i + 1) % 2;
-  return { "key": key, "value": t };
-}
 
 
 var svg = d3.select("body").append("svg")
@@ -53,41 +46,46 @@ svg.append("g")
 
 
 setInterval(function() {
-  var data = svg.selectAll(".trace")
-      .data([random_data()], function(d) { return d.key; })
+  d3.json(url + timestamps[ts_idx] + '/', function(error, data) {
+    trace = {'key': key_idx, 'value': data[0]}
+    key_idx = (key_idx + 1) % 2;
+    ts_idx = (ts_idx + 1) % timestamps.length;
 
-  data.enter()
-    .append("path")
-      .each(function(d) {
-        x.domain([0, d.value.length - 1]);
-        y.domain([0, d3.max(d.value)]);
-      })
-      .attr("class", "trace")
-      .attr("d", function(d) { return d3.svg.line()
-          .x(function(d, i) { return x(i); })
-          .y(y(0))
-        (d.value)})
-    .transition()
-      .duration(900)
-      .attr("d", function(d) { return d3.svg.line()
-          .x(function(d, i) { return x(i); })
-          .y(function(d) { return y(d); })
-        (d.value)})
+    var data = svg.selectAll(".trace")
+        .data([trace], function(d) { return d.key; })
 
-  data.exit()
-    .transition()
-      .duration(500)
-      .style("opacity", 0)
-      .remove();
+    data.enter()
+      .append("path")
+        .each(function(d) {
+          x.domain([0, (d.value.length - 1) * 2.5]);
+          y.domain([0, d3.max(d.value)]);
+        })
+        .attr("class", "trace")
+        .attr("d", function(d) { return d3.svg.line()
+            .x(function(d, i) { return x(i * 2.5); })
+            .y(y(0))
+          (d.value)})
+      .transition()
+        .duration(900)
+        .attr("d", function(d) { return d3.svg.line()
+            .x(function(d, i) { return x(i * 2.5); })
+            .y(function(d) { return y(d); })
+          (d.value)})
 
-  d3.select(".x.axis")
-    .transition()
-      .duration(900)
-      .call(xAxis);
+    data.exit()
+      .transition()
+        .duration(500)
+        .style("opacity", 0)
+        .remove();
 
-  d3.select(".y.axis")
-    .transition()
-      .duration(900)
-      .call(yAxis);
+    d3.select(".x.axis")
+      .transition()
+        .duration(900)
+        .call(xAxis);
 
+    d3.select(".y.axis")
+      .transition()
+        .duration(900)
+        .call(yAxis);
+  });
 }, 1000);
