@@ -7,7 +7,7 @@ setInterval(function() {
       .data([function() {
         var t = [];
         for (el in d3.range(Math.random() * 10)) {
-          t.push(el);
+          t.push(Math.random() * 100);
         }
         key = i;
         i = (i + 1) % 2;
@@ -16,16 +16,16 @@ setInterval(function() {
 
   console.log(i);
 
-  data.text("There is no update.")
+  data.text("There is no update.");
   data.enter().append("p")
-      .text(i)
+      .text(function(d) { return d.value; })
       .style("opacity", 0)
     .transition()
       .duration(900)
-      .style("opacity", 1)
+      .style("opacity", 1);
   data.exit()
     .transition()
       .duration(900)
       .style("opacity", 0)
-      .remove()
-}, 1000)
+      .remove();
+}, 1000);
