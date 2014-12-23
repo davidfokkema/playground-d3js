@@ -59,7 +59,7 @@ setInterval(function() {
         .attr("class", "trace")
         .each(function(d) {
           x.domain([0, (d.value[0].length - 1) * 2.5]);
-          y.domain([0, d3.max(d.value[0])]);
+          y.domain([0, d3.max(d.value, function(d) { return d3.max(d); })])
         })
         .selectAll("path")
           .data(function(d) { return d.value; }).enter()
