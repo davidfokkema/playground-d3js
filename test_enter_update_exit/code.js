@@ -80,6 +80,14 @@ setInterval(function() {
       .style("opacity", 0)
       .remove();
 
-  d3.select(".x.axis").call(xAxis);
-  d3.select(".y.axis").call(yAxis);
+  d3.select(".x.axis")
+    .transition()
+      .duration(900)
+      .call(xAxis);
+
+  d3.select(".y.axis")
+    .transition()
+      .duration(900)
+      .call(yAxis);
+
 }, 1000);
