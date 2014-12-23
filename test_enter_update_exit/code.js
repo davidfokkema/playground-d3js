@@ -1,23 +1,31 @@
+var i = 0;
+
 var body = d3.select("body")
 
 setInterval(function() {
   var data = body.selectAll("p")
-      .data(function() {
+      .data([function() {
         var t = [];
-        for (i in d3.range(Math.random() * 10)) {
-          t.push(i);
+        for (el in d3.range(Math.random() * 10)) {
+          t.push(el);
         }
-        return t;
-      })
+        key = i;
+        i = (i + 1) % 2;
+        return { 'key': key, 'value': t };
+      }()], function(d) { return d.key; })
 
-  data.text('U')
+  console.log(i);
+
+  data.text("There is no update.")
   data.enter().append("p")
-      .text("E")
+      .text(i)
       .style("opacity", 0)
     .transition()
+      .duration(900)
       .style("opacity", 1)
   data.exit()
     .transition()
+      .duration(900)
       .style("opacity", 0)
       .remove()
 }, 1000)
