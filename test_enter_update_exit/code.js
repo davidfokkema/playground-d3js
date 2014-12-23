@@ -47,7 +47,7 @@ svg.append("g")
 
 setInterval(function() {
   d3.json(url + timestamps[ts_idx] + '/', function(error, data) {
-    trace = {'key': key_idx, 'value': data[0]}
+    trace = {'key': key_idx, 'value': data}
     key_idx = (key_idx + 1) % 2;
     ts_idx = (ts_idx + 1) % timestamps.length;
 
@@ -55,22 +55,24 @@ setInterval(function() {
         .data([trace], function(d) { return d.key; })
 
     data.enter()
-      .append("path")
-        .each(function(d) {
-          x.domain([0, (d.value.length - 1) * 2.5]);
-          y.domain([0, d3.max(d.value)]);
-        })
+      .append("g")
         .attr("class", "trace")
-        .attr("d", function(d) { return d3.svg.line()
-            .x(function(d, i) { return x(i * 2.5); })
-            .y(y(0))
-          (d.value)})
-      .transition()
-        .duration(900)
-        .attr("d", function(d) { return d3.svg.line()
-            .x(function(d, i) { return x(i * 2.5); })
-            .y(function(d) { return y(d); })
-          (d.value)})
+        .each(function(d) {
+          x.domain([0, (d.value[0].length - 1) * 2.5]);
+          y.domain([0, d3.max(d.value[0])]);
+        })
+        .selectAll("path")
+          .data(function(d) { return d.value; }).enter()
+          .append("path")
+            .attr("class", function(d, i) { return 't' + (i + 1); })
+            .attr("d", d3.svg.line()
+                .x(function(d, i) { return x(i * 2.5); })
+                .y(y(0)))
+          .transition()
+            .duration(900)
+            .attr("d", d3.svg.line()
+                .x(function(d, i) { return x(i * 2.5); })
+                .y(function(d) { return y(d); }))
 
     data.exit()
       .transition()

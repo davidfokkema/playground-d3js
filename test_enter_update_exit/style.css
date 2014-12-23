@@ -7,8 +7,20 @@ svg path {
   fill: none;
 }
 
-#trace1 {
+.t1 {
+  stroke: black;
+}
+
+.t2 {
   stroke: red;
+}
+
+.t3 {
+  stroke: green;
+}
+
+.t4 {
+  stroke: cyan;
 }
 
 .axis line,
