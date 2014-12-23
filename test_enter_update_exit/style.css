@@ -12,7 +12,7 @@ svg path {
 }
 
 .axis line,
-.axis.box
+.data_rectangle
 {
   fill: none;
   stroke: black;

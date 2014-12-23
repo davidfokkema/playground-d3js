@@ -19,25 +19,50 @@ function random_data() {
   }
   key = i;
   i = (i + 1) % 2;
-  return { 'key': key, 'value': t };
+  return { "key": key, "value": t };
 }
 
 
 var svg = d3.select("body").append("svg")
+    .attr("width", fullwidth)
+    .attr("height", fullheight)
+  .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+svg.append("rect")
+    .attr("class", "data_rectangle")
     .attr("width", width)
-    .attr("height", height)
+    .attr("height", height);
+
+var xAxis = d3.svg.axis()
+    .scale(x)
+    .ticks(5)
+    .orient("bottom");
+
+var yAxis = d3.svg.axis()
+    .scale(y)
+    .ticks(5)
+    .orient("left");
+
+svg.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + height + ")");
+
+svg.append("g")
+    .attr("class", "y axis");
 
 
 setInterval(function() {
-  var data = svg.selectAll("path")
+  var data = svg.selectAll(".trace")
       .data([random_data()], function(d) { return d.key; })
 
   data.enter()
     .append("path")
       .each(function(d) {
-        x.domain([0, d.value.length]);
+        x.domain([0, d.value.length - 1]);
         y.domain([0, d3.max(d.value)]);
       })
+      .attr("class", "trace")
       .attr("d", function(d) { return d3.svg.line()
           .x(function(d, i) { return x(i); })
           .y(y(0))
@@ -54,4 +79,7 @@ setInterval(function() {
       .duration(500)
       .style("opacity", 0)
       .remove();
+
+  d3.select(".x.axis").call(xAxis);
+  d3.select(".y.axis").call(yAxis);
 }, 1000);
