@@ -33,9 +33,10 @@ var MyCustomLayer = L.Class.extend({
         this._map = map;
 
         // create a DOM element and put it into one of the map panes
-        this._el = L.DomUtil.create('div', 'my-custom-layer leaflet-zoom-hide');
+        this._el = L.DomUtil.create('div', 'leaflet-zoom-hide');
         map.getPanes().overlayPane.appendChild(this._el);
-        circles = d3.select(this._el).append("svg").selectAll("circle").data(data)
+        g = d3.select(this._el).append("svg").append("g")
+        circles = g.selectAll("circle").data(data)
 
         circles.enter()
             .append("circle")
@@ -45,6 +46,7 @@ var MyCustomLayer = L.Class.extend({
 
         // add a viewreset event listener for updating layer's position, do the latter
         map.on('viewreset', this._reset, this);
+        map.on('moveend', this._reset, this);
         this._reset();
     },
 
@@ -56,12 +58,16 @@ var MyCustomLayer = L.Class.extend({
 
     _reset: function () {
         // update layer's position
-        var pos = this._map.latLngToLayerPoint(this._latlng);
-        // var pos = this._map.containerPointToLayerPoint([0, 0]);
+        var pos = this._map.containerPointToLayerPoint([0, 0]);
         L.DomUtil.setPosition(this._el, pos);
+        // if you reposition the overlay, translate it with the negative offset to be able to use the conversion functions.
+        g.attr("transform", "translate(" + -pos.x + "," + -pos.y + ")");
+
+        var pos = this._map.latLngToLayerPoint(this._latlng);
         circles
-            .attr("cx", map.latLngToLayerPoint(map_origin).x)
-            .attr("cy", map.latLngToLayerPoint(map_origin).y);
+            .attr("cx", pos.x)
+            .attr("cy", pos.y);
+
     }
 });
 
