@@ -1,0 +1,18 @@
+#map {
+  width: 600px;
+  height: 400px;
+}
+
+svg {
+  opacity: .2;
+  background: red;
+  width: 600px;
+  height: 400px;
+}
+
+.my-custom-layer {
+  opacity: .2;
+  background: green;
+  width: 600px;
+  height: 400px;
+}
