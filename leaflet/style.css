@@ -4,15 +4,12 @@
 }
 
 svg {
-  opacity: .2;
-  background: red;
   width: 600px;
   height: 400px;
+  background: green;
+  opacity: .5;
 }
 
-.my-custom-layer {
-  opacity: .2;
-  background: green;
-  width: 600px;
-  height: 400px;
+.circle {
+  fill: red;
 }

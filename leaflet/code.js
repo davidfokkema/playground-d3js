@@ -1,6 +1,10 @@
 var map_origin = new L.LatLng(52.2, 4.7);
 
+var data = [[52.2, 4.7]];
+
 var map = L.map('map');
+
+var circles;
 
 // var svg = d3.select(map.getPanes().overlayPane).append("svg").attr("class", "leaflet-zoom-hide");
 //     // g = svg.append("g").attr("class", "leaflet-zoom-hide");
@@ -8,10 +12,6 @@ var map = L.map('map');
 map.setView(map_origin, 10);
 L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors', maxZoom: 18}).addTo(map);
 
-// d3.select("svg").append("circle")
-//     .attr("r", 10)
-//     .attr("cx", map.latLngToLayerPoint(map_origin).x)
-//     .attr("cy", map.latLngToLayerPoint(map_origin).y);
 //
 // function reset_layer() {
 //     console.log("called!")
@@ -35,6 +35,13 @@ var MyCustomLayer = L.Class.extend({
         // create a DOM element and put it into one of the map panes
         this._el = L.DomUtil.create('div', 'my-custom-layer leaflet-zoom-hide');
         map.getPanes().overlayPane.appendChild(this._el);
+        circles = d3.select(this._el).append("svg").selectAll("circle").data(data)
+
+        circles.enter()
+            .append("circle")
+                .attr("r", 10)
+                .attr("cx", map.latLngToLayerPoint(map_origin).x)
+                .attr("cy", map.latLngToLayerPoint(map_origin).y);
 
         // add a viewreset event listener for updating layer's position, do the latter
         map.on('viewreset', this._reset, this);
@@ -50,7 +57,11 @@ var MyCustomLayer = L.Class.extend({
     _reset: function () {
         // update layer's position
         var pos = this._map.latLngToLayerPoint(this._latlng);
+        // var pos = this._map.containerPointToLayerPoint([0, 0]);
         L.DomUtil.setPosition(this._el, pos);
+        circles
+            .attr("cx", map.latLngToLayerPoint(map_origin).x)
+            .attr("cy", map.latLngToLayerPoint(map_origin).y);
     }
 });
 
