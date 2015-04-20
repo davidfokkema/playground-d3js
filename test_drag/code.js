@@ -12,10 +12,10 @@ var drag = d3.behavior.drag()
 
 var line = g.append("line")
     .datum({ 'x': 50, 'y': 50 })
-    .attr("x1", 50)
-    .attr("y1", 50)
-    .attr("x2", 200)
-    .attr("y2", 200)
+    .attr("x1", function(d) { return d.x; })
+    .attr("y1", function(d) { return d.y; })
+    .attr("x2", function(d) { return d.x + 150; })
+    .attr("y2", function(d) { return d.y + 150; })
     .call(drag)
 
 function moveline(d) {
