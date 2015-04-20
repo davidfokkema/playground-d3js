@@ -16,14 +16,14 @@ var line = g.append("line")
 update_line();
 
 function update_line() {
-    line.attr("x1", function(d) { return d.x; })
-        .attr("y1", function(d) { return d.y; })
-        .attr("x2", function(d) { return d.x + 150; })
-        .attr("y2", function(d) { return d.y + 150; });
+  line.attr("x1", function(d) { return d.x; })
+      .attr("y1", function(d) { return d.y; })
+      .attr("x2", function(d) { return d.x + 150; })
+      .attr("y2", function(d) { return d.y + 150; });
 }
 
 function moveline(d) {
-    d.x = d3.event.x;
-    d.y = d3.event.y;
-    update_line();
+  d.x = d3.event.x;
+  d.y = d3.event.y;
+  update_line();
 }
