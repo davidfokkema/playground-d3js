@@ -31,6 +31,10 @@ var distances = g.selectAll('.distance').data(station_data)
   .enter().append("line")
     .attr("class", "distance");
 
+var distance_labels = g.selectAll('.distance_label').data(station_data)
+  .enter().append("text")
+    .attr("class", "distance_label");
+
 var front = g.append("line")
     .datum({ 'x': 50, 'y': 50, 'alpha': Math.PI / 8 });
 var core = g.append("circle")
@@ -69,7 +73,12 @@ function update_shower_front() {
     .attr("x1", function(d) { return d.x; })
     .attr("y1", function(d) { return d.y; })
     .attr("x2", function(d) { return d.xp; })
-    .attr("y2", function(d) { return d.yp; });
+    .attr("y2", function(d) { return d.yp; })
+
+  distance_labels
+    .attr("x", function(d) { return d.label_x + 5; })
+    .attr("y", function(d) { return d.label_y + 5; })
+    .text(function(d) { return d.dist.toFixed(); });
 }
 
 function move_core() {
@@ -86,6 +95,8 @@ function calculate_distances(d) {
   d.xp = front_line_x(fd, d.r);
   d.yp = front_line_y(fd, d.r);
   d.dist = Math.sqrt(Math.pow(d.x - d.xp, 2) + Math.pow(d.y - d.yp, 2));
+  d.label_x = (d.x + d.xp) / 2;
+  d.label_y = (d.y + d.yp) / 2;
 }
 
 function rotate_front() {

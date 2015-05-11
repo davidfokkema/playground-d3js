@@ -14,3 +14,7 @@ line {
 .distance {
   stroke: blue;
 }
+
+.distance_label {
+  fill: blue;
+}
