@@ -41,9 +41,9 @@ var front_rotate_handle = g.append("circle")
 update_shower_front();
 
 function update_shower_front() {
-  var d = front.datum();
-  function front_line_x(dist) { return d.x + dist * Math.cos(d.alpha) }
-  function front_line_y(dist) { return d.y + dist * Math.sin(d.alpha) }
+  var fd = front.datum();
+  function front_line_x(dist) { return fd.x + dist * Math.cos(fd.alpha) }
+  function front_line_y(dist) { return fd.y + dist * Math.sin(fd.alpha) }
 
   front
       .attr("x1", front_line_x(-FRONT_LENGTH))
@@ -51,8 +51,8 @@ function update_shower_front() {
       .attr("x2", front_line_x(FRONT_LENGTH))
       .attr("y2", front_line_y(FRONT_LENGTH));
 
-  core.attr("cx", d.x)
-      .attr("cy", d.y);
+  core.attr("cx", fd.x)
+      .attr("cy", fd.y);
 
   front_rotate_handle
       .attr("cx", front.attr("x2"))
@@ -65,8 +65,8 @@ function update_shower_front() {
   distances
     .attr("x1", function(d) { return d.x; })
     .attr("y1", function(d) { return d.y; })
-    .attr("x2", d.x)
-    .attr("y2", d.y);
+    .attr("x2", fd.x)
+    .attr("y2", fd.y);
 }
 
 function move_core() {
