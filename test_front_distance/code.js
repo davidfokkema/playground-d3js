@@ -1,7 +1,8 @@
 var fullwidth = 400,
     fullheight = 300;
 
-var FRONT_LENGTH = 100;
+var FRONT_LENGTH = 1000;
+var ROTATE_LENGTH = 100;
 
 var svg = d3.select("body").append("svg")
     .attr("width", fullwidth)
@@ -36,7 +37,9 @@ var core = g.append("circle")
     .attr("r", 5)
     .call(drag_core);
 var front_rotate_handle = g.append("circle")
-    .attr("r", 5)
+    .attr("r", 7)
+    .attr("fill", 'white')
+    .attr("stroke", 'black')
     .call(drag_alpha);
 
 function front_line_x(fd, dist) { return fd.x + dist * Math.cos(fd.alpha) }
@@ -55,8 +58,8 @@ function update_shower_front() {
       .attr("cy", fd.y);
 
   front_rotate_handle
-      .attr("cx", front.attr("x2"))
-      .attr("cy", front.attr("y2"));
+      .attr("cx", front_line_x(fd, ROTATE_LENGTH))
+      .attr("cy", front_line_y(fd, ROTATE_LENGTH));
 
   stations
     .attr("cx", function(d) { return d.x; })
