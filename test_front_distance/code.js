@@ -85,7 +85,7 @@ function calculate_distances(d) {
   d.r = (d.x - fd.x) * Math.cos(fd.alpha) + (d.y - fd.y) * Math.sin(fd.alpha);
   d.xp = front_line_x(fd, d.r);
   d.yp = front_line_y(fd, d.r);
-  d.dist = Math.sqrt((d.x - fd.x)^2 + (d.y - fd.y)^2);
+  d.dist = Math.sqrt(Math.pow(d.x - d.xp, 2) + Math.pow(d.y - d.yp, 2));
 }
 
 function rotate_front() {
