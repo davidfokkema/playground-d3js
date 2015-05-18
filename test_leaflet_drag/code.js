@@ -10,18 +10,17 @@ function y(coord) { return map.latLngToLayerPoint(coord).y; }
 
 
 // the map object, with tileLayer
-// var map = L.map('map');
-// L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
-//     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">' +
-//                  'OpenStreetMap</a> contributors, ' +
-//                  '&copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-//     maxZoom: 18
-// }).addTo(map);
+var map = L.map('map');
+L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">' +
+                 'OpenStreetMap</a> contributors, ' +
+                 '&copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+    maxZoom: 18
+}).addTo(map);
 
 
 // the svg layer on top of the map
-// var svg = d3.select(map.getPanes().overlayPane).append("svg"),
-var svg = d3.select(map).append("svg"),
+var svg = d3.select(map.getPanes().overlayPane).append("svg"),
     g = svg.append("g").attr("class", "leaflet-zoom-hide");
 
 
@@ -41,7 +40,7 @@ function update_layer_position() {
         .attr("cy", function(d) { return y(d); });
 }
 // update the svg layer after the map has been moved or zoomed
-// map.on('moveend', update_layer_position);
+map.on('moveend', update_layer_position);
 
 
 // drag behavior for circles
