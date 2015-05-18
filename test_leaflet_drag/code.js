@@ -71,4 +71,4 @@ function update_circles() {
 update_circles();
 
 // set a map view and trigger 'moveend' which will update the svg layer
-// map.setView(map_origin, 10);
+map.setView(map_origin, 10);
