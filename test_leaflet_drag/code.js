@@ -34,26 +34,38 @@ function update_layer_position() {
     // be able to use the conversion functions.
     g.attr("transform", "translate(" + -pos.x + "," + -pos.y + ")");
 
-    // reposition all circles
-    g.selectAll("circle")
-        .attr("cx", function(d) { return x(d); })
-        .attr("cy", function(d) { return y(d); });
+    update_circles();
 }
+
+// update the circles on the svg layer
+function update_circles() {
+  // reposition all circles
+  g.selectAll("circle")
+      .attr("cx", function(d) { return x(d); })
+      .attr("cy", function(d) { return y(d); });
+}
+
 // update the svg layer after the map has been moved or zoomed
 map.on('moveend', update_layer_position);
 
 
 // drag behavior for circles
 var drag = d3.behavior.drag()
-    .origin(function(d) { return {'x': d[0], 'y': d[1]}; })
-    .on("drag", movecircle);
+    .origin(function(d) { return map.latLngToContainerPoint(d); })
+    .on("drag", movecircle)
+    .on("dragstart", function() { map.dragging.disable(); })
+    .on("dragend", function() { map.dragging.enable(); });
+
 
 // event handler for moving the circles
 function movecircle(d) {
-  d[0] = d3.event.x;
-  d[1] = d3.event.y;
+  container_pos = [d3.event.x, d3.event.y];
+  latlon_pos = map.containerPointToLatLng(container_pos);
+  d[0] = latlon_pos.lat;
+  d[1] = latlon_pos.lng;
   update_circles();
 }
+
 
 // add circles for each data point
 g.selectAll("circle").data(data)
@@ -62,13 +74,6 @@ g.selectAll("circle").data(data)
       .attr("r", 10)
       .call(drag);
 
-
-function update_circles() {
-    g.selectAll("circle")
-        .attr("cx", function(d) { return d[0]; })
-        .attr("cy", function(d) { return d[1]; });
-}
-update_circles();
 
 // set a map view and trigger 'moveend' which will update the svg layer
 map.setView(map_origin, 10);
